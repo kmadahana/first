@@ -1,105 +1,96 @@
-<x-guest-layout>
-<div class="min-h-screen flex">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>BudgetWise — Sign In</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body style="margin:0; background:#030712; font-family: Figtree, sans-serif;">
 
-    {{-- LEFT SIDE - Image & Branding --}}
-    <div class="hidden lg:flex w-1/2 relative overflow-hidden">
+<div style="display:flex; min-height:100vh;">
+
+    {{-- LEFT SIDE --}}
+    <div style="width:50%; position:relative; overflow:hidden; display:flex; align-items:center;">
         <img
             src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&auto=format&fit=crop"
-            alt="Finance"
-            class="absolute inset-0 w-full h-full object-cover"
+            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;"
         />
-        <div class="absolute inset-0 bg-gradient-to-br from-red-900/80 via-gray-900/70 to-gray-950/90"></div>
-        <div class="relative z-10 flex flex-col justify-center px-14 text-white">
-            <div class="text-3xl font-bold mb-4">💰 BudgetWise</div>
-            <h2 class="text-5xl font-extrabold leading-tight mb-6">
-                Welcome <br> Back!
-            </h2>
-            <p class="text-gray-300 text-base leading-relaxed max-w-sm">
+        <div style="position:absolute; inset:0; background:linear-gradient(135deg, rgba(127,29,29,0.85), rgba(17,24,39,0.8));"></div>
+        <div style="position:relative; z-index:10; padding:0 56px; color:white;">
+            <div style="font-size:28px; font-weight:700; margin-bottom:16px;">💰 BudgetWise</div>
+            <h2 style="font-size:48px; font-weight:800; line-height:1.2; margin-bottom:24px;">Welcome<br>Back!</h2>
+            <p style="color:#d1d5db; font-size:16px; line-height:1.7; max-width:320px;">
                 Track your spending, hit your goals, and stay on top of your finances — all in one place.
             </p>
-            <div class="mt-8 flex gap-3">
-                <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                <div class="w-2 h-2 rounded-full bg-white/40"></div>
-            </div>
         </div>
     </div>
 
-    {{-- RIGHT SIDE - Login Form --}}
-    <div class="w-full lg:w-1/2 flex items-center justify-center bg-gray-950 px-8">
-        <div class="w-full max-w-md">
+    {{-- RIGHT SIDE --}}
+    <div style="width:50%; display:flex; align-items:center; justify-content:center; background:#030712; padding:32px;">
+        <div style="width:100%; max-width:420px;">
 
-            {{-- Mobile logo --}}
-            <div class="lg:hidden text-center mb-8">
-                <span class="text-2xl font-bold text-white">💰 BudgetWise</span>
-            </div>
-
-            <h3 class="text-3xl font-bold text-white mb-2">Sign in</h3>
-            <p class="text-gray-400 text-sm mb-8">
+            <h3 style="font-size:28px; font-weight:700; color:white; margin-bottom:8px;">Sign in</h3>
+            <p style="color:#9ca3af; font-size:14px; margin-bottom:32px;">
                 Don't have an account?
-                <a href="{{ route('register') }}" class="text-green-400 hover:text-green-300 font-medium">Sign up</a>
+                <a href="{{ route('register') }}" style="color:#4ade80; text-decoration:none; font-weight:600;">Sign up</a>
             </p>
 
-            {{-- Session Status --}}
-            <x-auth-session-status class="mb-4" :status="session('status')" />
+            @if (session('status'))
+                <div style="color:#4ade80; margin-bottom:16px; font-size:14px;">{{ session('status') }}</div>
+            @endif
 
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                {{-- Email --}}
-                <div class="mb-5">
-                    <label class="block text-sm font-medium text-gray-400 mb-2">Email address</label>
-                    <input
-                        id="email" type="email" name="email"
-                        value="{{ old('email') }}"
-                        required autofocus autocomplete="username"
-                        class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition"
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; color:#9ca3af; font-size:14px; margin-bottom:8px;">Email address</label>
+                    <input type="email" name="email" value="{{ old('email') }}" required autofocus
                         placeholder="you@example.com"
+                        style="width:100%; padding:12px 16px; background:#1f2937; border:1px solid #374151; border-radius:12px; color:white; font-size:14px; box-sizing:border-box; outline:none;"
                     />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-400 text-xs" />
+                    @error('email')
+                        <p style="color:#f87171; font-size:12px; margin-top:4px;">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                {{-- Password --}}
-                <div class="mb-5">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="text-sm font-medium text-gray-400">Password</label>
+                <div style="margin-bottom:20px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                        <label style="color:#9ca3af; font-size:14px;">Password</label>
                         @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="text-xs text-green-400 hover:text-green-300">
-                                Forgot password?
-                            </a>
+                            <a href="{{ route('password.request') }}" style="color:#4ade80; font-size:12px; text-decoration:none;">Forgot password?</a>
                         @endif
                     </div>
-                    <input
-                        id="password" type="password" name="password"
-                        required autocomplete="current-password"
-                        class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition"
+                    <input type="password" name="password" required
                         placeholder="••••••••"
+                        style="width:100%; padding:12px 16px; background:#1f2937; border:1px solid #374151; border-radius:12px; color:white; font-size:14px; box-sizing:border-box; outline:none;"
                     />
-                    <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-400 text-xs" />
+                    @error('password')
+                        <p style="color:#f87171; font-size:12px; margin-top:4px;">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                {{-- Remember Me --}}
-                <div class="flex items-center mb-6">
-                    <input id="remember_me" type="checkbox" name="remember"
-                        class="w-4 h-4 rounded border-gray-600 bg-gray-800 text-green-500 focus:ring-green-500">
-                    <label for="remember_me" class="ml-2 text-sm text-gray-400">Remember me</label>
+                <div style="display:flex; align-items:center; margin-bottom:24px;">
+                    <input type="checkbox" name="remember" id="remember" style="width:16px; height:16px;">
+                    <label for="remember" style="color:#9ca3af; font-size:14px; margin-left:8px;">Remember me</label>
                 </div>
 
-                {{-- Submit --}}
                 <button type="submit"
-                    class="w-full py-3 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-xl transition text-sm tracking-wide">
+                    style="width:100%; padding:14px; background:#dc2626; border:none; border-radius:12px; color:white; font-size:14px; font-weight:600; cursor:pointer; letter-spacing:0.5px;">
                     Sign In
                 </button>
 
-                {{-- Divider --}}
-                <div class="flex items-center my-6">
-                    <div class="flex-1 h-px bg-gray-800"></div>
-                    <span class="mx-4 text-xs text-gray-500">or</span>
-                    <div class="flex-1 h-px bg-gray-800"></div>
+                <div style="display:flex; align-items:center; margin:24px 0;">
+                    <div style="flex:1; height:1px; background:#1f2937;"></div>
+                    <span style="color:#6b7280; font-size:12px; margin:0 16px;">or</span>
+                    <div style="flex:1; height:1px; background:#1f2937;"></div>
                 </div>
 
                 <a href="{{ route('register') }}"
-                    class="block w-full py-3 border border-green-500 text-green-400 hover:bg-green-500 hover:text-white font-semibold rounded-xl transition text-sm tracking-wide text-center">
+                    style="display:block; width:100%; padding:14px; border:1.5px solid #22c55e; border-radius:12px; color:#4ade80; font-size:14px; font-weight:600; text-align:center; text-decoration:none; box-sizing:border-box;">
                     Create an account
                 </a>
 
@@ -108,4 +99,5 @@
     </div>
 
 </div>
-</x-guest-layout>
+</body>
+</html>
